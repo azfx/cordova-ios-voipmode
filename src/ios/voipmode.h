@@ -1,9 +1,9 @@
-/********* Echo.h Cordova Plugin Header *******/
+/********* voipmode.h Cordova Plugin Header *******/
 
 #import <Cordova/CDV.h>
 
 @interface VoIPMode : CDVPlugin
 
-- (void)echo:(CDVInvokedUrlCommand*)command;
+- (void)keepSocketAlive:(CDVInvokedUrlCommand*)command;
 
 @end
