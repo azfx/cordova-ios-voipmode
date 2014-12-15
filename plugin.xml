@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    id="com.azfx.plugin.ios.voipmode"
+    version="1.0.0">
+
+    <name>Cordova iOS VoIP mode</name>
+
+  <description>
+    Plugin to configure iOS app for VoIP backgroundeMode
+  </description>
+
+  <asset src="www/voipplugin.js" target="plugins/voipplugin.js" />
+
+  <engines>
+    <engine name="cordova" version=">=2.7.0" />
+  </engines>
+
+  <!-- ios -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*/plugins">
+      <plugin name="Cordova iOS VoIP mode" value="Cordova iOS VoIP mode" onload="true" />
+    </config-file>
+
+    <config-file target="config.xml" parent="/widget">
+      <feature name="VoIPMode">
+        <param name="ios-package" value="CordovaVoIPMode"/>
+        <param name="onload" value="true" />
+      </feature>
+    </config-file>
+
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+        <array>
+            <string>audio</string>
+            <string>voip</string>
+        </array>
+    </config-file>
+
+    <header-file src="src/ios/voipmode.h" />
+
+    <source-file src="src/ios/voipmode.m" />
+
+  </platform>
+</plugin>
