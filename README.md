@@ -50,6 +50,6 @@ cordova.plugins.voipMode.willEnterForeground = function() {};
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
 
-[didEnterBackground] #get-notified-when-the-application-enters-background
-[inSuspendedState] #execute-keep-alive-routines-when-application-in-suspended-state
-[willEnterForeground] #get-notified-when-the-application-is-ready-to-enter-foreground
+[didEnterBackground]: #get-notified-when-the-application-enters-background
+[inSuspendedState]: #execute-keep-alive-routines-when-application-in-suspended-state
+[willEnterForeground]: #get-notified-when-the-application-is-ready-to-enter-foreground
