@@ -28,7 +28,7 @@ The `voipMode.didEnterBackground` interface can be used to get notified when the
 cordova.plugins.voipMode.didEnterBackground = function() {};
 ```
 
-### Execute keep alive routines when application stays in background.
+### Execute keep alive routines when application is in suspended state.
 The `voipMode.inSuspendedState` interface can be used to execute keep alive routines to stay connected with voip server while the app stays suspended.
 
 ```javascript
@@ -51,5 +51,5 @@ cordova.plugins.voipMode.willEnterForeground = function() {};
 5. Create new Pull Request
 
 [didEnterBackground]: #get-notified-when-the-application-enters-background
-[inSuspendedState]: #execute-keep-alive-routines-when-application-in-suspended-state
+[inSuspendedState]: #execute-keep-alive-routines-when-application-is-in-suspended-state
 [willEnterForeground]: #get-notified-when-the-application-is-ready-to-enter-foreground
