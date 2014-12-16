@@ -1,5 +1,7 @@
-window.keepSocketAlive = function(str, callback) {
-    cordova.exec(callback, function(err) {
-        callback('Could not keep Socket Alive');
-    }, "VoIPMode", "keepSocketAlive", [str]);
-};
+var exec    = require('cordova/exec'),
+    channel = require('cordova/channel');
+
+/**
+ * Called when the background mode has been activated.
+ */
+exports.onSleeping = function () {};

@@ -15,6 +15,12 @@
     <engine name="cordova" version=">=2.7.0" />
   </engines>
 
+  <!-- js -->
+  <js-module src="www/voipplugin.js" name="VoipMode">
+      <clobbers target="cordova.plugins.voipMode" />
+      <clobbers target="plugin.voipMode" />
+  </js-module>
+
   <!-- ios -->
   <platform name="ios">
     <config-file target="config.xml" parent="/*/plugins">
@@ -22,7 +28,7 @@
     </config-file>
 
     <config-file target="config.xml" parent="/widget">
-      <feature name="VoIPMode">
+      <feature name="VoipMode">
         <param name="ios-package" value="CordovaVoIPMode"/>
         <param name="onload" value="true" />
       </feature>

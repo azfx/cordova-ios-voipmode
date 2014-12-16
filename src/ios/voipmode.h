@@ -2,8 +2,9 @@
 
 #import <Cordova/CDV.h>
 
-@interface VoIPMode : CDVPlugin
+@interface CordovaVoIPMode : CDVPlugin
 
-- (void)keepSocketAlive:(CDVInvokedUrlCommand*)command;
+- (void) applicationDidEnterBackground:(NSNotification *)notification;
+- (void) applicationWillEnterForeground:(NSNotification *)notification;
 
 @end

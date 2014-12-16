@@ -1,9 +1,13 @@
-/********* Echo.m Cordova Plugin Implementation *******/
+/********* voipmode.m Cordova Plugin Implementation *******/
 
 #import "voipmode.h"
 #import <Cordova/CDV.h>
 
-@implementation VoIPMode
+@implementation CordovaVoIPMode
+
+NSString *const kAPPBackgroundJsNamespace = @"cordova.plugins.voipMode";
+NSString *const kAPPBackgroundEventSleeping = @"Sleeping";
+
 
 #pragma mark -
 #pragma mark Initialization methods
@@ -13,7 +17,7 @@
  */
 - (void) pluginInitialize
 {
-    [self disable:NULL];
+   // [self disable:NULL];
     [self observeLifeCycle];
 }
 
@@ -27,12 +31,12 @@
     if (&UIApplicationDidEnterBackgroundNotification && &UIApplicationWillEnterForegroundNotification) {
 
         [listener addObserver:self
-                     selector:@selector(applicationDidEnterBackground)
+                     selector:@selector(applicationDidEnterBackground:)
                          name:UIApplicationDidEnterBackgroundNotification
                        object:nil];
 
         [listener addObserver:self
-                     selector:@selector(stopKeepingAwake)
+                     selector:@selector(applicationWillEnterForeground:)
                          name:UIApplicationWillEnterForegroundNotification
                        object:nil];
 
@@ -43,7 +47,7 @@
 }
 
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (void)applicationDidEnterBackground:(NSNotification *) notification
 {
     //TO DO
     //Register/Ensure connection is established with the gateway ?
@@ -55,7 +59,7 @@
     }
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
+- (void)applicationWillEnterForeground:(NSNotification *) notification
 {
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
     NSLog(@"stoppingKeepAliveTimeout");
@@ -67,24 +71,39 @@
 
     //TO DO
     // Continue ensuring the client is connected to the webrtc gateway..
+    [self fireEvent:kAPPBackgroundEventSleeping withParams:NULL];
 }
 
 
-- (void)keepSocketAlive:(CDVInvokedUrlCommand*)command
+// - (void)keepSocketAlive:(CDVInvokedUrlCommand*)command
+// {
+//
+//     NSLog(@"### -->VOIP keepSocketAlive callback");
+//
+//     CDVPluginResult* pluginResult = nil;
+//     NSString* echo = [command.arguments objectAtIndex:0];
+//
+//     if (echo != nil && [echo length] > 0) {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
+//     } else {
+//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+//     }
+//
+//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+// }
+
+
+/**
+ * Method to fire an event with some parameters in the browser.
+ */
+- (void) fireEvent:(NSString*)event withParams:(NSString*)params
 {
+    NSString* js = [NSString stringWithFormat:@"setTimeout('%@.on%@(%@)',0);",
+                    kAPPBackgroundJsNamespace, event, params];
 
-    NSLog(@"### -->VOIP keepSocketAlive callback");
-
-    CDVPluginResult* pluginResult = nil;
-    NSString* echo = [command.arguments objectAtIndex:0];
-
-    if (echo != nil && [echo length] > 0) {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-    } else {
-        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-    }
-
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [self.commandDelegate evalJs:js];
 }
+
+
 
 @end
