@@ -6,7 +6,9 @@
 @implementation CordovaVoIPMode
 
 NSString *const kAPPBackgroundJsNamespace = @"cordova.plugins.voipMode";
-NSString *const kAPPBackgroundEventSleeping = @"Sleeping";
+NSString *const kAPPBackgroundEventSuspended = @"inSuspendedState";
+NSString *const kAPPBackgroundEventDidEnterBackground = @"didEnterBackground";
+NSString *const kAPPBackgroundEventWillEnterForeground = @"willEnterForeground";
 
 
 #pragma mark -
@@ -55,42 +57,29 @@ NSString *const kAPPBackgroundEventSleeping = @"Sleeping";
     BOOL backgroundAccepted = [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{ [self backgroundHandler]; }];
     if (backgroundAccepted)
     {
-        NSLog(@"VOIP backgrounding accepted");
+        [self fireEvent:kAPPBackgroundEventDidEnterBackground withParams:NULL];
+        NSLog(@"VOIP backgrounding accepted for the App");
+    } else {
+        NSLog(@"VOIP backgrounding NOT accepted for the App");
     }
 }
 
 - (void)applicationWillEnterForeground:(NSNotification *) notification
 {
     [[UIApplication sharedApplication] clearKeepAliveTimeout];
-    NSLog(@"stoppingKeepAliveTimeout");
+
+    [self fireEvent:kAPPBackgroundEventWillEnterForeground withParams:NULL];
+
+    NSLog(@"App will enter foreground");
 }
 
 - (void)backgroundHandler {
 
     NSLog(@"### -->VOIP backgrounding callback"); // What to do here to extend timeout?
 
-    //TO DO
-    // Continue ensuring the client is connected to the webrtc gateway..
-    [self fireEvent:kAPPBackgroundEventSleeping withParams:NULL];
+    [self fireEvent:kAPPBackgroundEventSuspended withParams:NULL];
 }
 
-
-// - (void)keepSocketAlive:(CDVInvokedUrlCommand*)command
-// {
-//
-//     NSLog(@"### -->VOIP keepSocketAlive callback");
-//
-//     CDVPluginResult* pluginResult = nil;
-//     NSString* echo = [command.arguments objectAtIndex:0];
-//
-//     if (echo != nil && [echo length] > 0) {
-//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:echo];
-//     } else {
-//         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
-//     }
-//
-//     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-// }
 
 
 /**
@@ -98,7 +87,8 @@ NSString *const kAPPBackgroundEventSleeping = @"Sleeping";
  */
 - (void) fireEvent:(NSString*)event withParams:(NSString*)params
 {
-    NSString* js = [NSString stringWithFormat:@"setTimeout('%@.on%@(%@)',0);",
+
+    NSString* js = [NSString stringWithFormat:@"setTimeout('%@.%@(%@)',0);",
                     kAPPBackgroundJsNamespace, event, params];
 
     [self.commandDelegate evalJs:js];

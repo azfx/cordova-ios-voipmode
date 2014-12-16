@@ -4,4 +4,6 @@ var exec    = require('cordova/exec'),
 /**
  * Called when the background mode has been activated.
  */
-exports.onSleeping = function () {};
+exports.inSuspendedState = function () {};
+exports.didEnterBackground = function () {};
+exports.willEnterForeground = function () {};
