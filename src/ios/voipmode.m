@@ -51,8 +51,6 @@ NSString *const kAPPBackgroundEventWillEnterForeground = @"willEnterForeground";
 
 - (void)applicationDidEnterBackground:(NSNotification *) notification
 {
-    //TO DO
-    //Register/Ensure connection is established with the gateway ?
 
     BOOL backgroundAccepted = [[UIApplication sharedApplication] setKeepAliveTimeout:600 handler:^{ [self backgroundHandler]; }];
     if (backgroundAccepted)
